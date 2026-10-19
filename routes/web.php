@@ -8,6 +8,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::view('/quienes-somos', 'publica.nosotros')->name('nosotros');
+Route::view('/contacto', 'publica.contacto')->name('contacto');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardRedirectController::class)->name('dashboard');
 
