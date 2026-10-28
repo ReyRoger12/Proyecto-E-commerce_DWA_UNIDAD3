@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
@@ -20,62 +20,62 @@ class AuthenticationTest extends TestCase
 
     public function test_user_can_log_in_with_valid_credentials(): void
     {
-        $user = User::factory()->create(['password' => 'secret123']);
+        $usuario = Usuario::factory()->create(['clave' => 'secret123']);
 
         $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'secret123',
+            'correo' => $usuario->correo,
+            'clave' => 'secret123',
         ]);
 
         $response->assertRedirect('/dashboard');
-        $this->assertAuthenticatedAs($user);
+        $this->assertAuthenticatedAs($usuario);
     }
 
     public function test_user_cannot_log_in_with_an_invalid_password(): void
     {
-        $user = User::factory()->create(['password' => 'secret123']);
+        $usuario = Usuario::factory()->create(['clave' => 'secret123']);
 
         $response = $this->from('/login')->post('/login', [
-            'email' => $user->email,
-            'password' => 'incorrecta',
+            'correo' => $usuario->correo,
+            'clave' => 'incorrecta',
         ]);
 
         $response->assertRedirect('/login');
         $response->assertSessionHasErrors([
-            'email' => 'El correo o la contraseña no son correctos.',
+            'correo' => 'El correo o la contraseña no son correctos.',
         ]);
         $this->assertGuest();
     }
 
     public function test_login_is_blocked_after_five_failed_attempts(): void
     {
-        $user = User::factory()->create(['password' => 'secret123']);
+        $usuario = Usuario::factory()->create(['clave' => 'secret123']);
 
         for ($attempt = 0; $attempt < 5; $attempt++) {
             $this->post('/login', [
-                'email' => $user->email,
-                'password' => 'incorrecta',
+                'correo' => $usuario->correo,
+                'clave' => 'incorrecta',
             ]);
         }
 
         $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'secret123',
+            'correo' => $usuario->correo,
+            'clave' => 'secret123',
         ]);
 
-        $response->assertSessionHasErrors('email');
+        $response->assertSessionHasErrors('correo');
         $this->assertStringStartsWith(
             'Demasiados intentos.',
-            session('errors')->first('email'),
+            session('errors')->first('correo'),
         );
         $this->assertGuest();
     }
 
     public function test_authenticated_user_can_log_out(): void
     {
-        $user = User::factory()->create();
+        $usuario = Usuario::factory()->create();
 
-        $response = $this->actingAs($user)->post('/logout');
+        $response = $this->actingAs($usuario)->post('/logout');
 
         $response->assertRedirect('/');
         $this->assertGuest();
