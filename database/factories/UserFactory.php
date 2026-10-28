@@ -3,66 +3,69 @@
 namespace Database\Factories;
 
 use App\Enums\UserRole;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends Factory<User>
+ * @extends Factory<Usuario>
  */
-class UserFactory extends Factory
+class UsuarioFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected $model = Usuario::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $nombres = ['Juan', 'Mario', 'Maria', 'Pedro'];
+        $apellidos = ['Lopez', 'Sanchez', 'Hernandez', 'Martinez'];
+        $combinaciones = [];
+
+        foreach ($nombres as $nombreDisponible) {
+            foreach ($apellidos as $apellidoDisponible) {
+                $combinaciones[] = [
+                    'nombre' => $nombreDisponible,
+                    'apellidos' => $apellidoDisponible,
+                    'correo' => strtolower(Str::ascii(substr($nombreDisponible, 0, 1).$apellidoDisponible)).'@tuxtla.tecnm.mx',
+                ];
+            }
+        }
+
+        $correosUsados = Usuario::query()->pluck('correo')->all();
+        $opciones = collect($combinaciones)
+            ->shuffle()
+            ->unique('correo')
+            ->reject(fn (array $datos): bool => in_array($datos['correo'], $correosUsados, true))
+            ->values();
+
+        if ($opciones->isEmpty()) {
+            throw new \RuntimeException('No quedan correos institucionales disponibles para la fábrica.');
+        }
+
+        $identidad = fake()->randomElement($opciones->all());
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'role' => UserRole::Client,
+            'nombre' => $identidad['nombre'],
+            'apellidos' => $identidad['apellidos'],
+            'correo' => $identidad['correo'],
+            'clave' => Hash::make('123'),
+            'rol' => fake()->randomElement([UserRole::Client, UserRole::Manager]),
             'remember_token' => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function administrador(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(fn () => ['rol' => UserRole::Administrator]);
     }
 
-    public function client(): static
+    public function gerente(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'role' => UserRole::Client,
-        ]);
+        return $this->state(fn () => ['rol' => UserRole::Manager]);
     }
 
-    public function employee(): static
+    public function cliente(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'role' => UserRole::Employee,
-        ]);
-    }
-
-    public function manager(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'role' => UserRole::Manager,
-        ]);
+        return $this->state(fn () => ['rol' => UserRole::Client]);
     }
 }
