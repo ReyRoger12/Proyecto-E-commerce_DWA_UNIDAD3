@@ -1,7 +1,7 @@
-[2026-10-27 21:44:25] local.WARNING: Login incorrecto {"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
-[2026-10-27 21:44:26] local.INFO: Login correcto {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
-[2026-10-27 21:44:27] local.INFO: Logout {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
-[2026-10-27 21:44:27] local.INFO: Login correcto {"usuario_id":3,"correo":"mhernandez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
-[2026-10-27 21:44:28] local.INFO: Logout {"usuario_id":3,"correo":"mhernandez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
-[2026-10-27 21:44:28] local.INFO: Login correcto {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
-[2026-10-27 21:44:28] local.INFO: Logout {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"} 
+[2026-10-27 21:44:25] local.WARNING: Login incorrecto {"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
+[2026-10-27 21:44:26] local.INFO: Login correcto {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
+[2026-10-27 21:44:27] local.INFO: Logout {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
+[2026-10-27 21:44:27] local.INFO: Login correcto {"usuario_id":3,"correo":"mhernandez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
+[2026-10-27 21:44:28] local.INFO: Logout {"usuario_id":3,"correo":"mhernandez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
+[2026-10-27 21:44:28] local.INFO: Login correcto {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
+[2026-10-27 21:44:28] local.INFO: Logout {"usuario_id":1,"correo":"jlopez@tuxtla.tecnm.mx","ip":"127.0.0.1"}
