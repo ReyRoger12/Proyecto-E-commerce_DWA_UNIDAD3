@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\UserRole;
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -64,7 +64,7 @@ class DashboardAccessTest extends TestCase
         return [
             'selector' => ['/dashboard'],
             'cliente' => ['/cliente/dashboard'],
-            'empleado' => ['/empleado/dashboard'],
+            'administrador' => ['/administrador/dashboard'],
             'gerente' => ['/gerente/dashboard'],
         ];
     }
@@ -73,7 +73,7 @@ class DashboardAccessTest extends TestCase
     {
         return [
             'cliente' => [UserRole::Client, 'cliente.dashboard', 'Panel de cliente'],
-            'empleado' => [UserRole::Employee, 'empleado.dashboard', 'Panel de empleado'],
+            'administrador' => [UserRole::Administrator, 'administrador.dashboard', 'Panel de administrador'],
             'gerente' => [UserRole::Manager, 'gerente.dashboard', 'Panel de gerente'],
         ];
     }
@@ -82,7 +82,7 @@ class DashboardAccessTest extends TestCase
     {
         return [
             'cliente' => [UserRole::Client, 'cliente.dashboard'],
-            'empleado' => [UserRole::Employee, 'empleado.dashboard'],
+            'administrador' => [UserRole::Administrator, 'administrador.dashboard'],
             'gerente' => [UserRole::Manager, 'gerente.dashboard'],
         ];
     }
@@ -90,21 +90,21 @@ class DashboardAccessTest extends TestCase
     public static function forbiddenDashboards(): array
     {
         return [
-            'cliente en panel de empleado' => [UserRole::Client, 'empleado.dashboard'],
+            'cliente en panel de administrador' => [UserRole::Client, 'administrador.dashboard'],
             'cliente en panel de gerente' => [UserRole::Client, 'gerente.dashboard'],
-            'empleado en panel de cliente' => [UserRole::Employee, 'cliente.dashboard'],
-            'empleado en panel de gerente' => [UserRole::Employee, 'gerente.dashboard'],
+            'administrador en panel de cliente' => [UserRole::Administrator, 'cliente.dashboard'],
+            'administrador en panel de gerente' => [UserRole::Administrator, 'gerente.dashboard'],
             'gerente en panel de cliente' => [UserRole::Manager, 'cliente.dashboard'],
-            'gerente en panel de empleado' => [UserRole::Manager, 'empleado.dashboard'],
+            'gerente en panel de administrador' => [UserRole::Manager, 'administrador.dashboard'],
         ];
     }
 
-    private function createUserWithRole(UserRole $role): User
+    private function createUserWithRole(UserRole $role): Usuario
     {
         $factory = match ($role) {
-            UserRole::Client => User::factory()->client(),
-            UserRole::Employee => User::factory()->employee(),
-            UserRole::Manager => User::factory()->manager(),
+            UserRole::Administrator => Usuario::factory()->administrador(),
+            UserRole::Manager => Usuario::factory()->gerente(),
+            UserRole::Client => Usuario::factory()->cliente(),
         };
 
         return $factory->create();
